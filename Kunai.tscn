@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://kunai/Kunai.png" type="Texture" id=1]
+[ext_resource path="res://Kunai.gd" type="Script" id=2]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "kunai",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 14.0
+height = 42.0
+
+[node name="Kunai" type="RigidBody2D"]
+position = Vector2( 192, 96 )
+collision_layer = 0
+gravity_scale = 0.0
+script = ExtResource( 2 )
+velocidad_min = 150
+velocidad_max = 250
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 7.62939e-06, 0 )
+scale = Vector2( 0.875, 0.620313 )
+frames = SubResource( 1 )
+animation = "kunai"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 1 )
+shape = SubResource( 2 )
+
+[node name="Visibilidad" type="VisibilityNotifier2D" parent="."]
+position = Vector2( -1, -2 )
+scale = Vector2( 0.4375, 2.45684 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[connection signal="screen_exited" from="Visibilidad" to="." method="_on_Visibilidad_screen_exited"]

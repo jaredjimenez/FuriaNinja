@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Personaje.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Mundo.gd" type="Script" id=2]
+[ext_resource path="res://Kunai.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Interfaz.tscn" type="PackedScene" id=4]
+[ext_resource path="res://imagenes/fondo.png" type="Texture" id=5]
+[ext_resource path="res://audios/muerte.wav" type="AudioStream" id=6]
+[ext_resource path="res://audios/juego.wav" type="AudioStream" id=7]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -1.05612, -2.30598, 0, 0, 0, 0, 639.828, -0.163361, 0, 0, 0, 0, 640.175, 959.8, 0, 0, 0, 0, 324.729, 960.109, 0, 0, 0, 0, -1.125, 959.5, 0, 0, 0, 0, -1.05612, -2.30598 )
+}
+
+[node name="Mundo" type="Node"]
+script = ExtResource( 2 )
+Kunai = ExtResource( 3 )
+
+[node name="Fondo" type="TextureRect" parent="."]
+margin_left = -1.0
+margin_top = -8.0
+margin_right = 646.0
+margin_bottom = 704.0
+texture = ExtResource( 5 )
+
+[node name="Ninja" parent="." instance=ExtResource( 1 )]
+position = Vector2( 324.396, 387.53 )
+monitorable = false
+
+[node name="KunaiTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="InicioTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="PosicionDeInicio" type="Position2D" parent="."]
+position = Vector2( 320, 480 )
+
+[node name="Camino" type="Path2D" parent="."]
+position = Vector2( 0, -0.613517 )
+scale = Vector2( 1, 0.733945 )
+curve = SubResource( 1 )
+
+[node name="KunaiPosicion" type="PathFollow2D" parent="Camino"]
+position = Vector2( -1.05612, -2.30598 )
+rotation = 0.00334306
+
+[node name="Interfaz" parent="." instance=ExtResource( 4 )]
+
+[node name="AudioMuerte" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+
+[node name="Musica" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+
+[connection signal="golpe" from="Ninja" to="." method="game_over"]
+[connection signal="timeout" from="KunaiTimer" to="." method="_on_KunaiTimer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_ScoreTimer_timeout"]
+[connection signal="timeout" from="InicioTimer" to="." method="_on_InicioTimer_timeout"]
+[connection signal="iniciar_juego" from="Interfaz" to="." method="nuevo_juego"]
